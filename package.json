@@ -1,0 +1,44 @@
+{
+  "name": "donut-video-element",
+  "version": "0.0.1",
+  "description": "Custom element (web component) for Donut (https://github.com/flavioribeiro/donut)",
+  "type": "module",
+  "main": "dist/donut-video-element.js",
+  "files": [
+    "./dist/*",
+    "README.md",
+    "index.html"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && rollup --config",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "publish-patch": "yarn run build && np patch --no-tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flavioribeiro/donut-video.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "keywords": [
+    "video",
+    "player"
+  ],
+  "author": "Flavio Ribeiro",
+  "license": "MIT",
+  "dependencies": {
+    "custom-video-element": "^0.0.2",
+    "parse-uri": "^1.0.7"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "np": "^6.2.0",
+    "rollup": "^2.2.0",
+    "rollup-plugin-babel-minify": "^10.0.0",
+    "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-serve": "^2.0.1",
+    "rollup-plugin-terser": "^5.3.0"
+  }
+}

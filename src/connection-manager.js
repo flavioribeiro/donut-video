@@ -4,6 +4,7 @@ class ConnectionManager {
     constructor(videoElement) {
         this.peerConnection = null;
         this.videoElement = videoElement;
+        this.connected = false;
     }
 
     parseSource(streamUrl) {
@@ -22,6 +23,7 @@ class ConnectionManager {
         this.peerConnection.addTransceiver('video', { direction: 'recvonly' })
         this.peerConnection.ontrack = (event) => {
             this.videoElement.srcObject = event.streams[0];
+            this.connected = true;
         }
         this.peerConnection.createOffer()
             .then(offer => {

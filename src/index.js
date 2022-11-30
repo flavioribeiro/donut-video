@@ -7,6 +7,9 @@ class DonutVideoElement extends CustomVideoElement {
     super();
     this.nativeEl.onplay = this.onplay.bind(this);
     this.connectionManager = new ConnectionManager(this.nativeEl)
+    if (this.nativeEl.autoplay) {
+      this.onplay();
+    }
   }
 
   get src() {
@@ -30,7 +33,7 @@ class DonutVideoElement extends CustomVideoElement {
   }
 
   onplay() {
-    if (this.connectionManager && this.src) {
+    if (this.connectionManager && !this.connectionManager.connected && this.src) {
       this.connectionManager.connect(this.server, this.src);
     }
   }

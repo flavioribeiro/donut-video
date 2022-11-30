@@ -5,10 +5,8 @@ import ConnectionManager from './connection-manager';
 class DonutVideoElement extends CustomVideoElement {
   constructor() {
     super();
-    this.player = null;
-    this.connectionManager = null;
-    this.videoEl = this.createVideoElement();
-    this.startConnectionManager();
+    this.nativeEl.onplay = this.onplay.bind(this);
+    this.connectionManager = new ConnectionManager(this.nativeEl)
   }
 
   get src() {
@@ -31,41 +29,10 @@ class DonutVideoElement extends CustomVideoElement {
     }
   }
 
-  async load() {
-    if (!this.src) {
-      this.player.unload();
-    } else {
-      try {
-        await this.player.load(this.src);
-      } catch (e) {
-        onError(e);
-      }
+  onplay() {
+    if (this.connectionManager && this.src) {
+      this.connectionManager.connect(this.server, this.src);
     }
-  }
-
-  createVideoElement() {
-    document.createElement('video')
-    let v = this.shadowRoot.querySelector("video");
-    v.autoplay = true;
-    v.controls = true;
-    v.muted = true;
-    return v
-  }
-
-  startConnectionManager() {
-    if (this.src) {
-      this.connectionManager = new ConnectionManager(this.server, this.src, this.videoEl)
-    }
-  }
-
-  connectedCallback() {
-    if (this.player && this.src) {
-      this.load();
-    }
-  }
-
-  disconnectedCallback() {
-    this.player && this.player.unload();
   }
 }
 

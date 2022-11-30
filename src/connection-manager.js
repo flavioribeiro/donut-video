@@ -21,12 +21,13 @@ class ConnectionManager {
     }
 
     connect(server, src) {
-        console.log("about to connect to ", server, src);
         this.peerConnection = new RTCPeerConnection();
         this.peerConnection.addTransceiver('video', { direction: 'recvonly' })
         this.peerConnection.ontrack = (event) => {
-            console.log("on track", event, document.getElementById('video'));
             this.videoElement.srcObject = event.streams[0];
+            this.videoElement.onloadedmetadata = (e) => {
+                this.videoElement.play();
+            }
         }
         this.peerConnection.createOffer()
             .then(offer => {
@@ -40,9 +41,9 @@ class ConnectionManager {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        "srtHost": src.host, 
-                        "srtPort": src.port, 
-                        "srtStreamId": src.streamId, 
+                        "srtHost": src.host,
+                        "srtPort": src.port,
+                        "srtStreamId": src.streamId,
                         offer
                     })
                 })

@@ -7,7 +7,7 @@ class DonutVideoElement extends CustomVideoElement {
     super();
     this.player = null;
     this.connectionManager = null;
-    this.videoEl = document.createElement('video');
+    this.videoEl = this.createVideoElement();
     this.startConnectionManager();
   }
 
@@ -43,9 +43,17 @@ class DonutVideoElement extends CustomVideoElement {
     }
   }
 
+  createVideoElement() {
+    document.createElement('video')
+    let v = this.shadowRoot.querySelector("video");
+    v.autoplay = true;
+    v.controls = true;
+    v.muted = true;
+    return v
+  }
+
   startConnectionManager() {
     if (this.src) {
-      console.log("got src, video element???", this.videoEl)
       this.connectionManager = new ConnectionManager(this.server, this.src, this.videoEl)
     }
   }

@@ -22,9 +22,6 @@ class ConnectionManager {
         this.peerConnection.addTransceiver('video', { direction: 'recvonly' })
         this.peerConnection.ontrack = (event) => {
             this.videoElement.srcObject = event.streams[0];
-            this.videoElement.onloadedmetadata = (e) => {
-                this.videoElement.play();
-            }
         }
         this.peerConnection.createOffer()
             .then(offer => {

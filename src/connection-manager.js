@@ -1,13 +1,9 @@
 import parseUri from 'parse-uri';
 
 class ConnectionManager {
-    constructor(donutServer, streamUrl, videoElement) {
-        console.log("Creating connection manager")
+    constructor(videoElement) {
         this.peerConnection = null;
-        this.donutServer = donutServer;
-        this.videoElement = videoElement
-        this.streamSource = this.parseSource(streamUrl);
-        this.connect(this.donutServer, this.streamSource);
+        this.videoElement = videoElement;
     }
 
     parseSource(streamUrl) {
@@ -21,6 +17,7 @@ class ConnectionManager {
     }
 
     connect(server, src) {
+        let source = this.parseSource(src);
         this.peerConnection = new RTCPeerConnection();
         this.peerConnection.addTransceiver('video', { direction: 'recvonly' })
         this.peerConnection.ontrack = (event) => {
@@ -33,7 +30,6 @@ class ConnectionManager {
             .then(offer => {
                 this.peerConnection.setLocalDescription(offer)
                 const signalingUrl = server + '/doSignaling';
-                console.log("Hitting signaling url ", signalingUrl);
                 return fetch(signalingUrl, {
                     method: 'post',
                     headers: {
@@ -41,9 +37,9 @@ class ConnectionManager {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        "srtHost": src.host,
-                        "srtPort": src.port,
-                        "srtStreamId": src.streamId,
+                        "srtHost": source.host,
+                        "srtPort": source.port,
+                        "srtStreamId": source.streamId,
                         offer
                     })
                 })

@@ -1,10 +1,21 @@
 import CustomVideoElement from 'custom-video-element';
 import ConnectionManager from './connection-manager';
 
+const template = document.createElement('template');
+
+template.innerHTML = `
+<style>
+  :host {
+    width: 640px;
+    height: 360px;
+  }
+</style>
+`;
 
 class DonutVideoElement extends CustomVideoElement {
   constructor() {
     super();
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
     this.nativeEl.onplay = this.onplay.bind(this);
     this.connectionManager = new ConnectionManager(this.nativeEl)
     if (this.nativeEl.autoplay) {

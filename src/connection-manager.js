@@ -5,6 +5,7 @@ class ConnectionManager {
         this.peerConnection = null;
         this.videoElement = videoElement;
         this.connected = false;
+        this.currentCue = null;
     }
 
     parseSource(streamUrl) {
@@ -47,6 +48,17 @@ class ConnectionManager {
         })
     }
 
+    displayCue(event) {
+        let caption = JSON.parse(event.data);
+        let startTime = this.videoElement.currentTime;
+        let cue = new VTTCue(startTime, startTime + 100, caption.Text);
+        if (this.currentCue !== null) {
+            this.metadataTrack.removeCue(this.currentCue);
+        }
+        this.metadataTrack.addCue(cue);
+        this.currentCue = cue;
+    }
+
     connect(server, src) {
         this.peerConnection = new RTCPeerConnection();
         this.peerConnection.addTransceiver('video', { direction: 'recvonly' })
@@ -56,8 +68,10 @@ class ConnectionManager {
             this.connected = true;
         }
         this.peerConnection.ondatachannel = (event) => {
+            this.metadataTrack = this.videoElement.addTextTrack('captions', '608/708', 'en');
+            this.metadataTrack.mode = "showing";
             event.channel.onmessage = (event) => {
-                console.log('onmessage', event.data);
+                this.displayCue(event);
             }
         }
         this.peerConnection.createOffer()

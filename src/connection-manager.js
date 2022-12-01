@@ -50,9 +50,15 @@ class ConnectionManager {
     connect(server, src) {
         this.peerConnection = new RTCPeerConnection();
         this.peerConnection.addTransceiver('video', { direction: 'recvonly' })
+        this.dataChannel = this.peerConnection.createDataChannel('metadata');
         this.peerConnection.ontrack = (event) => {
             this.videoElement.srcObject = event.streams[0];
             this.connected = true;
+        }
+        this.peerConnection.ondatachannel = (event) => {
+            event.channel.onmessage = (event) => {
+                console.log('onmessage', event.data);
+            }
         }
         this.peerConnection.createOffer()
             .then(offer => {

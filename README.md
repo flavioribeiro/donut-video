@@ -11,7 +11,11 @@ You can import the player, point it to your donut server and pass the source you
     <script type="module" src="https://unpkg.com/donut-video-element@0.0.1"></script>
   </head>
   <body>
-    <donut-video server="http://localhost:8080" src="srt://[ip]:[port]/[stream-id]" controls autoplay />
+    <donut-video 
+      server="http://localhost:8080" 
+      src="srt://[ip]:[port]/[stream-id]" 
+      controls autoplay 
+    />
   </body>
 </html>
 ```

@@ -48,8 +48,7 @@ class ConnectionManager {
         })
     }
 
-    displayCue(event) {
-        let caption = JSON.parse(event.data);
+    displayCue(caption) {
         let startTime = this.videoElement.currentTime;
         let cue = new VTTCue(startTime, startTime + 100, caption.Text);
         if (this.currentCue !== null) {
@@ -71,7 +70,12 @@ class ConnectionManager {
             this.metadataTrack = this.videoElement.addTextTrack('captions', '608/708', 'en');
             this.metadataTrack.mode = "showing";
             event.channel.onmessage = (event) => {
-                this.displayCue(event);
+                let msg = JSON.parse(event.data)
+                if (msg.Type == "captions") {
+                    this.displayCue(msg);
+                } else {
+                    console.log("Metadata received: ", event)
+                }
             }
         }
         this.peerConnection.createOffer()

@@ -1,6 +1,6 @@
 {
   "name": "donut-video-element",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Custom element (web component) for Donut (https://github.com/flavioribeiro/donut)",
   "type": "module",
   "main": "dist/donut-video-element.js",

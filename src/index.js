@@ -1,5 +1,6 @@
 import CustomVideoElement from 'custom-video-element';
 import ConnectionManager from './connection-manager';
+import Stats from './stats';
 
 const template = document.createElement('template');
 
@@ -17,7 +18,9 @@ class DonutVideoElement extends CustomVideoElement {
     super();
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     this.nativeEl.onplay = this.onplay.bind(this);
-    this.connectionManager = new ConnectionManager(this.nativeEl)
+    this.stats = new Stats(this.shadowRoot);
+    this.connectionManager = new ConnectionManager(this.nativeEl, this.stats);
+    this.shadowRoot.append(this.stats.render())
     if (this.nativeEl.autoplay) {
       this.onplay();
     }

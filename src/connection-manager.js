@@ -1,9 +1,10 @@
 import parseUri from 'parse-uri';
 
 class ConnectionManager {
-    constructor(videoElement) {
+    constructor(videoElement, stats) {
         this.peerConnection = null;
         this.videoElement = videoElement;
+        this.stats = stats;
         this.connected = false;
         this.currentCue = null;
     }
@@ -74,7 +75,7 @@ class ConnectionManager {
                 if (msg.Type == "captions") {
                     this.displayCue(msg);
                 } else {
-                    console.log("Metadata received: ", event)
+                    this.stats.add(msg.Message)
                 }
             }
         }
